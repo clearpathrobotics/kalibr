@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+
+<launch>
+  <!-- This argument needs to be set for importing the params. -->
+  <arg name="stereo_params_camchain" />
+
+  <!-- If running this launch file with rosbags set this to true -->
+  <arg name="bags" default="false" />
+
+  <!-- Set this to true if you want to visualize the raw and rectified images. -->
+  <arg name="rviz" default="false" />
+
+  <!-- Do you want to generate disparity and point clouds from the rectified images.
+  If yes? set this argument to true -->
+  <arg name="stereo_disparity" default="false" />
+
+  <!-- Camera and Kalibr arguments and params -->
+  <arg name="camera" default="stereo" />
+  <arg name="left_camera_name" default="left" />
+  <arg name="right_camera_name" default="right" />
+  <arg name="scale" default="1.0" />
+  <arg name="process_every_nth_frame" default="1" />
+
+  <node pkg="nodelet" type="nodelet" name="$(arg camera)_nodelet_manager" args="manager" />
+
+  <group if="$(arg bags)">
+    <param name="use_sim_time" value="true" />
+
+    <!-- Decompress raw images from bags -->
+    <node name="decompress_left_images" pkg="image_transport" type="republish" args="compressed in:=$(arg camera)/left/image_raw raw out:=$(arg camera)/left/image_raw"/>
+    <node name="decompress_right_images" pkg="image_transport" type="republish" args="compressed in:=$(arg camera)/right/image_raw raw out:=$(arg camera)/right/image_raw"/>
+
+    <!-- Debayer nodes to be run on decompressed raw images from bags -->
+    <group ns="$(arg camera)" >
+      <group ns="left">
+        <node pkg="nodelet" type="nodelet" name="debayer"
+            args="load image_proc/debayer /$(arg camera)_nodelet_manager" />
+      </group>
+
+      <group ns="right">
+        <node pkg="nodelet" type="nodelet" name="debayer"
+            args="load image_proc/debayer /$(arg camera)_nodelet_manager" />
+      </group>
+    </group>
+  </group>
+
+
+  <group if="$(arg rviz)">
+    <node pkg="rviz" type="rviz" name="stereo_rviz"
+          args="-d $(find kalibr)/config/stereo_calibration.rviz"/>
+  </group>
+
+  <!-- Undistort images and publish new camera information and rectified images -->
+  <group ns="$(arg camera)">
+    <node name="stereo_undistort" pkg="nodelet" type="nodelet"
+          args="load image_undistort/StereoUndistortNodelet /$(arg camera)_nodelet_manager" >
+      <param name="publish_tf" value="false" />
+      <param name="output_frame" value="stereo_left" />
+      <param name="input_camera_info_from_ros_params" value="true"/>
+      <param name="left_camera_namespace" value="$(arg left_camera_name)"/>
+      <param name="right_camera_namespace" value="$(arg right_camera_name)"/>
+      <param name="process_every_nth_frame" value="$(arg process_every_nth_frame)"/>
+      <rosparam file="$(arg stereo_params_camchain)"/>
+
+      <!-- change this to image_color if you want to rectify the colored images -->
+      <remap from="raw/left/image" to="$(arg left_camera_name)/image_color"/>
+      <remap from="raw/right/image" to="$(arg right_camera_name)/image_color"/>
+
+      <remap from="rect/left/image" to="$(arg left_camera_name)/image_rect"/>
+      <remap from="rect/right/image" to="$(arg right_camera_name)/image_rect"/>
+
+      <remap from="rect/left/camera_info" to="$(arg left_camera_name)/camera_info"/>
+      <remap from="rect/right/camera_info" to="$(arg right_camera_name)/camera_info"/>
+    </node>
+  </group>
+
+  <group if="$(arg stereo_disparity)">
+    <group ns="$(arg camera)" >
+      <node pkg="nodelet" type="nodelet" name="disparity"
+            args="load stereo_image_proc/disparity /$(arg camera)_nodelet_manager" >
+        <param name="approximate_sync" value="true" />
+        <param name="queue_size" value="50" />
+        <rosparam>
+          prefilter_size: 9
+          prefilter_cap: 31
+          correlation_window_size: 21
+          min_disparity: 0
+          disparity_range: 64
+          uniqueness_ratio: 12.0
+          texture_threshold: 10
+          speckle_size: 1000
+          speckle_range: 15
+          approximate_sync: true
+          stereo_algorithm: 0
+          P1: 0.0
+          P2: 1000.0
+          fullDP: false
+          disp12MaxDiff: 0
+        </rosparam>
+      </node>
+
+      <node pkg="nodelet" type="nodelet" name="point_cloud2"
+        args="load stereo_image_proc/point_cloud2 /$(arg camera)_nodelet_manager" >
+        <remap from="left/image_rect_color" to="left/image_rect" />
+        <param name="approximate_sync" value="true" />
+        <param name="queue_size" value="50" />
+      </node>
+    </group>
+  </group>
+
+</launch>
