@@ -1,9 +1,19 @@
 folder=$1
-string=$2
-camera_number=$3
 cd $folder
-mkdir $camera_number
-for file in $string-*.png; do
-  mv "$file" "./$camera_number/${file/$string-/}"
+
+mkdir calibration_params && tar xzf calibrationdata.tar.gz -C ./calibration_params
+cd calibration_params/
+
+mkdir cam0
+for file in left-*.png; do
+  mv "$file" "./cam0/${file/left-/}"
 done
+
+mkdir cam1
+for file in right-*.png; do
+  mv "$file" "./cam1/${file/right-/}"
+done
+
 cd -
+
+
