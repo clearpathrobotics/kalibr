@@ -1,3 +1,5 @@
+#!/bin/bash
+
 folder=$1
 cd $folder
 
