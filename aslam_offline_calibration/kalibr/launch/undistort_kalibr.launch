@@ -2,17 +2,19 @@
 
 <launch>
   <!-- This argument needs to be set for importing the params. -->
-  <arg name="stereo_params_camchain" />
+  <arg name="stereo_params_camchain" doc="Path to the Kalibr camchain params .yaml file." />
 
   <!-- If running this launch file with rosbags set this to true -->
-  <arg name="bags" default="false" />
+  <arg name="bags" default="false"
+        doc="Set to true if raw compressed images are being used from bag files." />
 
   <!-- Set this to true if you want to visualize the raw and rectified images. -->
-  <arg name="rviz" default="false" />
+  <arg name="rviz" default="false" doc="Set to true if rviz visualization is required." />
 
   <!-- Do you want to generate disparity and point clouds from the rectified images.
   If yes? set this argument to true -->
-  <arg name="stereo_disparity" default="false" />
+  <arg name="stereo_disparity" default="false"
+        doc="Set to true if disparity and point clouds need to be generated from rectified images." />
 
   <!-- Camera and Kalibr arguments and params -->
   <arg name="camera" default="stereo" />

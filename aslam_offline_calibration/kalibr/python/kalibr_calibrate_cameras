@@ -402,17 +402,17 @@ def main():
 
             #write to file
             bagtag = parsed.bagfile.translate(None, "<>:/\|?*").replace('.bag', '', 1)
-            resultFile = parsed.output_folder + "/" + "camchain" + ".yaml"
+            resultFile = os.path.join(parsed.output_folder, "camchain" + ".yaml")
             kcc.saveChainParametersYaml(calibrator, resultFile, graph)
             print "Results written to file: {0}".format(resultFile)
 
             #save results to file
-            resultFileTxt = parsed.output_folder + "/" + "results-camchain" + ".txt"
+            resultFileTxt = os.path.join(parsed.output_folder, "results-camchain" + ".txt")
             kcc.saveResultTxt(calibrator, filename=resultFileTxt)
             print "  Detailed results written to file: {0}".format(resultFileTxt)
 
             #generate report
-            reportFile = parsed.output_folder + "/" + "report-camchain" + ".pdf"
+            reportFile = os.path.join(parsed.output_folder, "report-camchain" + ".pdf")
             G=None;
             if numCams>1:
                 G=graph
