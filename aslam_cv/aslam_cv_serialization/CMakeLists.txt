@@ -9,6 +9,15 @@ catkin_simple()
 INCLUDE(autogen_cameras.cmake)
 #INCLUDE(autogen_frames.cmake)
 
+find_package(OpenCV REQUIRED)
+
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
+)
+
 cs_add_library(${PROJECT_NAME}
 #  ${AUTOGEN_FRAME_CPP_FILES}
   ${AUTOGEN_CAMERA_CPP_FILES}
@@ -16,7 +25,7 @@ cs_add_library(${PROJECT_NAME}
 )
 
 find_package(Boost REQUIRED COMPONENTS serialization system)
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${OpenCV_LIBRARIES})
 
 # Avoid clash with tr1::tuple: https://code.google.com/p/googletest/source/browse/trunk/README?r=589#257
 #add_definitions(-DGTEST_USE_OWN_TR1_TUPLE=0)
