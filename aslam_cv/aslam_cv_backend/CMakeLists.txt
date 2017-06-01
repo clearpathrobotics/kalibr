@@ -5,6 +5,17 @@ find_package(catkin_simple REQUIRED)
 
 catkin_simple()
 
+find_package(OpenCV REQUIRED)
+
+find_package(Boost REQUIRED)
+
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
+)
+
 cs_add_library(${PROJECT_NAME}
   src/GridCalibrationTargetDesignVariableContainer.cpp
   # src/CameraGeometryDesignVariableContainer.cpp
@@ -20,7 +31,7 @@ catkin_add_gtest(${PROJECT_NAME}_test
 
 find_package(Boost REQUIRED COMPONENTS system)
 
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${OpenCV_LIBRARIES})
 target_link_libraries(${PROJECT_NAME}_test ${PROJECT_NAME})
 
 cs_install()
