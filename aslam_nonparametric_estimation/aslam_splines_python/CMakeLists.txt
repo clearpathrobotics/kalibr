@@ -4,12 +4,18 @@ project(aslam_splines_python)
 find_package(catkin_simple REQUIRED)
 catkin_simple()
 
+find_package(OpenCV REQUIRED)
+
+include_directories(
+  ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
+)
+
 add_python_export_library(${PROJECT_NAME} python/aslam_splines
   src/spline_module.cpp
   src/BSplineMotionError.cpp
   src/SimpleSplineError.cpp
 )
-
 
 cs_install()
 cs_export()
