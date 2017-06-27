@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(aslam_cv_backend_python)
 
+LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
+
 find_package(catkin_simple REQUIRED)
 catkin_simple()
 
@@ -11,6 +13,9 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
 )
+
+find_package(Cholmod REQUIRED)
+include_directories(${CHOLMOD_INCLUDE_DIR})
 
 add_python_export_library(${PROJECT_NAME} python/aslam_cv_backend
   src/module.cpp

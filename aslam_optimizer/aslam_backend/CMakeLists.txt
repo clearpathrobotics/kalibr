@@ -1,12 +1,16 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(aslam_backend)
 
+LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
+
 find_package(catkin_simple REQUIRED)
 catkin_simple()
 
 find_package(Boost REQUIRED COMPONENTS system thread)
-
 include_directories(${Eigen_INCLUDE_DIRS})
+
+find_package(Cholmod REQUIRED)
+include_directories(${CHOLMOD_INCLUDE_DIR})
 
 #add_definitions( -fPIC -msse2 -mssse3 -march=nocona -Wextra -Winit-self -Woverloaded-virtual -Wnon-virtual-dtor -Wsign-promo -Wno-long-long -std=c++0x -O3)
 

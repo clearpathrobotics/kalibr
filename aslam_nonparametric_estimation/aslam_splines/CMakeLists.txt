@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(aslam_splines)
 
+LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
+
 find_package(catkin_simple REQUIRED)
 catkin_simple()
 
@@ -21,6 +23,9 @@ catkin_add_gtest(${PROJECT_NAME}_test
   test/TestErrors.cpp
 #  test/TestOPTBSpline.cpp
   )
+
+find_package(Cholmod REQUIRED)
+include_directories(${CHOLMOD_INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME}_test ${PROJECT_NAME})
 
