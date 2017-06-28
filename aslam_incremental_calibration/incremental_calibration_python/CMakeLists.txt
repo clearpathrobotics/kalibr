@@ -22,7 +22,5 @@ add_python_export_library(${PROJECT_NAME} src/incremental_calibration
   src/LinearSolver.cpp
 )
 
-
-
 cs_install()
 cs_export()
