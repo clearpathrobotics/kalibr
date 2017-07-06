@@ -1,11 +1,15 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(aslam_cv_error_terms)
 
+LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
+
 find_package(catkin_simple REQUIRED)
 catkin_simple()
 
 find_package(Boost REQUIRED COMPONENTS system )
 
+find_package(Cholmod REQUIRED)
+include_directories(${CHOLMOD_INCLUDE_DIR})
 
 # Avoid clash with tr1::tuple: https://code.google.com/p/googletest/source/browse/trunk/README?r=589#257
 add_definitions(-DGTEST_USE_OWN_TR1_TUPLE=0)

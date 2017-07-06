@@ -6,7 +6,7 @@
   <maintainer email="paulfurgale@mavt.ethz.ch">Paul Furgale</maintainer>
   <author>Paul Furgale</author>
   <license>New BSD</license>
-  
+
   <buildtool_depend>catkin</buildtool_depend>
   <buildtool_depend>catkin_simple</buildtool_depend>.
 
@@ -24,11 +24,17 @@
   <build_depend>sparse_block_matrix</build_depend>
   <build_depend>sm_python</build_depend>
   <build_depend>aslam_cv_backend_python</build_depend>
-       
+
   <run_depend>aslam_cameras_april_python</run_depend>
   <run_depend>aslam_cv_backend_python</run_depend>
   <run_depend>aslam_backend_python</run_depend>
   <run_depend>incremental_calibration_python</run_depend>
   <run_depend>aslam_splines_python</run_depend>
+  <run_depend>image_undistort</run_depend>
+  <run_depend>nodelet</run_depend>
+  <run_depend>image_transport</run_depend>
+  <run_depend>image_proc</run_depend>
+  <run_depend>rviz</run_depend>
+  <run_depend>stereo_image_proc</run_depend>
 
 </package>

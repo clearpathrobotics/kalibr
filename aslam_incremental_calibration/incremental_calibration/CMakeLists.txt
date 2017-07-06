@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(incremental_calibration)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/../cmake/)
+LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
 
 find_package(catkin_simple REQUIRED)
 catkin_simple()
@@ -39,6 +40,9 @@ cs_add_library(${PROJECT_NAME}
   src/algorithms/marginalize.cpp
   src/algorithms/linalg.cpp
 )
+
+find_package(Cholmod REQUIRED)
+include_directories(${CHOLMOD_INCLUDE_DIR})
 
 find_package(Boost REQUIRED COMPONENTS system thread)
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${TBB_LIBRARIES})

@@ -7,10 +7,19 @@ catkin_simple()
 
 ADD_DEFINITIONS(-DASLAM_USE_ROS )
 
+find_package(OpenCV REQUIRED)
+
 find_package(Boost REQUIRED COMPONENTS system serialization filesystem)
 
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
+)
+
 #common commands for building c++ executables and libraries
-cs_add_library(${PROJECT_NAME} 
+cs_add_library(${PROJECT_NAME}
   src/CameraGeometryBase.cpp
   src/GlobalShutter.cpp
   src/RollingShutter.cpp
@@ -34,7 +43,7 @@ cs_add_library(${PROJECT_NAME}
   src/Image.cpp
   )
 
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${OpenCV_LIBRARIES})
 
 # Avoid clash with tr1::tuple: https://code.google.com/p/googletest/source/browse/trunk/README?r=589#257
 add_definitions(-DGTEST_USE_OWN_TR1_TUPLE=0)

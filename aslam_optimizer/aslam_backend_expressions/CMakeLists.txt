@@ -1,17 +1,20 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(aslam_backend_expressions)
 
-include_directories(include ${catkin_INCLUDE_DIRS})
+LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
 
 SET(CMAKE_CXX_FLAGS "-std=c++0x")
 
 find_package(catkin_simple REQUIRED)
-
 catkin_simple()
 
+include_directories(include ${catkin_INCLUDE_DIRS})
 include_directories(${EIGEN_INCLUDE_DIRS})
 
 find_package(Boost REQUIRED COMPONENTS system)
+
+find_package(Cholmod REQUIRED)
+include_directories(${CHOLMOD_INCLUDE_DIR})
 
 cs_add_library(${PROJECT_NAME}
   src/RotationExpression.cpp
